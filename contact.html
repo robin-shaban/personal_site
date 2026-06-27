@@ -55,11 +55,7 @@
   </section>
 
   <section class="contact-grid">
-    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/contact-success.html">
-      <input type="hidden" name="form-name" value="contact">
-      <p style="position:absolute;left:-9999px;visibility:hidden" aria-hidden="true">
-        <label>Don't fill this out if you're human: <input name="bot-field"></label>
-      </p>
+    <form class="contact-form" method="post" action="mailto:contact@robin-shaban.com" enctype="text/plain">
       <div class="form-grid">
         <div class="form-row">
           <label for="name">Name <span class="req">*</span></label>
@@ -155,6 +151,38 @@
       btn.setAttribute('aria-expanded', 'false');
       document.documentElement.classList.remove('nav-open');
     }));
+  })();
+</script>
+
+<script>
+  (function() {
+    const form = document.querySelector('.contact-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const organisation = document.getElementById('organisation').value.trim();
+      const purposeEl = document.getElementById('purpose');
+      const purposeLabel = purposeEl.options[purposeEl.selectedIndex].text;
+      const message = document.getElementById('message').value.trim();
+
+      const subject = 'Inquiry: ' + purposeLabel + ' \u2014 ' + name;
+
+      const bodyLines = ['Name: ' + name, 'Email: ' + email];
+      if (organisation) bodyLines.push('Organisation: ' + organisation);
+      bodyLines.push('Purpose: ' + purposeLabel);
+      bodyLines.push('');
+      bodyLines.push('Message:');
+      bodyLines.push(message);
+
+      const mailto = 'mailto:contact@robin-shaban.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+
+      window.location.href = mailto;
+    });
   })();
 </script>
 </body>
